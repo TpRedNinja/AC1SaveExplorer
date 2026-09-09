@@ -1,10 +1,14 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Win32;
@@ -35,10 +39,45 @@ namespace AC1SaveExplorer
         private static string PropHashesPath => Path.Combine(SettingsDir, "prop_hashes.json");
         private static string ClassNamesPath => Path.Combine(SettingsDir, "class_names.json");
 
+        // GitHub source of truth for the shared/community dictionary and update checks —
+        // anyone can grow this by editing community_hashes.json in the repo and opening a PR.
+        private const string GitHubOwner = "TpRedNinja";
+        private const string GitHubRepo = "AC1SaveExplorer";
+        private const string GitHubBranch = "master";
+        private static string CommunityDictionaryUrl =>
+            $"https://raw.githubusercontent.com/{GitHubOwner}/{GitHubRepo}/{GitHubBranch}/community_hashes.json";
+        private static string LatestReleaseApiUrl =>
+            $"https://api.github.com/repos/{GitHubOwner}/{GitHubRepo}/releases/latest";
+        private static string ReleasesPageUrl => $"https://github.com/{GitHubOwner}/{GitHubRepo}/releases";
+
+        private static readonly HttpClient Http = BuildHttpClient();
+
+        private static HttpClient BuildHttpClient()
+        {
+            var client = new HttpClient { Timeout = TimeSpan.FromSeconds(8) };
+            // GitHub's API rejects requests with no User-Agent header
+            client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("AC1SaveExplorer", App.Version));
+            return client;
+        }
+
+        private readonly AppSettings _settings;
+        private bool _themeComboInitializing = true;
+
         public MainWindow()
         {
             InitializeComponent();
             ObjectList.ItemsSource = _visible;
+
+            _settings = App.LoadSettings();
+
+            VersionText.Text = $"v{App.Version}";
+
+            ThemeCombo.ItemsSource = App.AvailableThemes;
+            ThemeCombo.SelectedItem = _settings.Theme;
+            _themeComboInitializing = false;
+
+            AlwaysOnTopCheck.IsChecked = _settings.AlwaysOnTop;
+            Topmost = _settings.AlwaysOnTop;
 
             LoadSeedDictionaries();
             LoadPersistedDictionaries();
@@ -48,6 +87,9 @@ namespace AC1SaveExplorer
             DumpStatus.Text = "Showing a small built-in sample. Load a real dump.json to replace it.";
             RebuildObjects();
             RefreshView();
+
+            _ = SyncCommunityDictionaryAsync(silent: true);
+            _ = CheckForUpdatesAsync(showCheckingText: false);
         }
 
         // ================= default / seed dictionaries =================
@@ -112,6 +154,141 @@ namespace AC1SaveExplorer
             {
                 HashStatus.Text = "Could not autosave dictionaries: " + ex.Message;
             }
+        }
+
+        // ================= community dictionary (pulled from GitHub) =================
+
+        // Merges in anything the community has confirmed that this install doesn't already
+        // have. Deliberately additive/non-destructive: it never overwrites a key you've
+        // already got locally (whether that's a built-in default or your own naming), so
+        // pulling the community file can never clobber your own work.
+        private async Task SyncCommunityDictionaryAsync(bool silent)
+        {
+            try
+            {
+                if (!silent) HashStatus.Text = "Checking community dictionary…";
+                var json = await Http.GetStringAsync(CommunityDictionaryUrl);
+                var community = JsonSerializer.Deserialize<CommunityDictionaryFile>(json);
+                if (community == null) return;
+
+                int addedProps = 0, addedClasses = 0;
+                foreach (var kv in community.PropHashes)
+                    if (!_propHashes.ContainsKey(kv.Key)) { _propHashes[kv.Key] = kv.Value; addedProps++; }
+                foreach (var kv in community.ClassNames)
+                    if (!_classNames.ContainsKey(kv.Key)) { _classNames[kv.Key] = kv.Value; addedClasses++; }
+
+                if (addedProps > 0 || addedClasses > 0)
+                {
+                    foreach (var obj in _allObjects) obj.InvalidateRows();
+                    RebuildObjects();
+                    RefreshView();
+                    PersistDictionaries();
+                }
+
+                HashStatus.Text = addedProps + addedClasses > 0
+                    ? $"Pulled {addedProps} property names and {addedClasses} object names from the community dictionary."
+                    : "Community dictionary checked — nothing new for this install.";
+            }
+            catch (Exception ex)
+            {
+                if (!silent) HashStatus.Text = "Couldn't reach the community dictionary: " + ex.Message;
+                // silent startup check: fail quietly, the app works fine fully offline
+            }
+        }
+
+        private async void BtnSyncCommunity_Click(object sender, RoutedEventArgs e) => await SyncCommunityDictionaryAsync(silent: false);
+
+        // ================= updates =================
+
+        private async void BtnCheckUpdates_Click(object sender, RoutedEventArgs e) =>
+            await CheckForUpdatesAsync(showCheckingText: true);
+
+        // showCheckingText controls only the transitional "Checking…" text and whether a failed
+        // check is reported — used to keep the silent startup check from being noisy when the
+        // user's just offline. If a newer version genuinely IS found, that always shows either way.
+        private async Task CheckForUpdatesAsync(bool showCheckingText)
+        {
+            if (showCheckingText) UpdateStatus.Text = "Checking…";
+            try
+            {
+                var json = await Http.GetStringAsync(LatestReleaseApiUrl);
+                using var doc = JsonDocument.Parse(json);
+                var tag = doc.RootElement.TryGetProperty("tag_name", out var t) ? t.GetString() : null;
+                if (string.IsNullOrWhiteSpace(tag))
+                {
+                    if (showCheckingText) UpdateStatus.Text = "Couldn't read the latest release.";
+                    return;
+                }
+
+                var latest = tag.TrimStart('v', 'V');
+                if (IsNewerVersion(latest, App.Version))
+                {
+                    UpdateStatus.Text = $"v{latest} is available (you're on v{App.Version}). Click here to open the releases page.";
+                    UpdateStatus.Cursor = System.Windows.Input.Cursors.Hand;
+                    UpdateStatus.TextDecorations = System.Windows.TextDecorations.Underline;
+                    UpdateStatus.MouseLeftButtonUp -= OpenReleasesPage;
+                    UpdateStatus.MouseLeftButtonUp += OpenReleasesPage;
+                }
+                else if (showCheckingText)
+                {
+                    UpdateStatus.Text = $"You're up to date (v{App.Version}).";
+                    UpdateStatus.Cursor = System.Windows.Input.Cursors.Arrow;
+                    UpdateStatus.TextDecorations = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                if (showCheckingText) UpdateStatus.Text = "Couldn't check for updates: " + ex.Message;
+                // silent startup check: fail quietly, most people run this fully offline
+            }
+        }
+
+        private void OpenReleasesPage(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            try { Process.Start(new ProcessStartInfo(ReleasesPageUrl) { UseShellExecute = true }); }
+            catch { /* nothing more we can do if the OS refuses to open a browser */ }
+        }
+
+        private static bool IsNewerVersion(string latest, string current)
+        {
+            Version.TryParse(NormalizeVersion(latest), out var l);
+            Version.TryParse(NormalizeVersion(current), out var c);
+            if (l == null || c == null) return !string.Equals(latest, current, StringComparison.OrdinalIgnoreCase);
+            return l > c;
+        }
+
+        private static string NormalizeVersion(string v)
+        {
+            var parts = v.Split('.');
+            return parts.Length switch
+            {
+                1 => v + ".0.0",
+                2 => v + ".0",
+                _ => v
+            };
+        }
+
+        // ================= theme / window options =================
+
+        // Live — no restart. App.ApplyTheme mutates the app's one ResourceDictionary in place,
+        // and every color in the theme files is a DynamicResource, so every control already on
+        // screen just repaints itself immediately.
+        private void ThemeCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (_themeComboInitializing) return;
+            if (ThemeCombo.SelectedItem is not string theme) return;
+
+            App.ApplyTheme(theme);
+            _settings.Theme = theme;
+            App.SaveSettings(_settings);
+        }
+
+        private void AlwaysOnTop_Changed(object sender, RoutedEventArgs e)
+        {
+            bool on = AlwaysOnTopCheck.IsChecked == true;
+            Topmost = on;
+            _settings.AlwaysOnTop = on;
+            App.SaveSettings(_settings);
         }
 
         private SaveDump BuildSampleDump()
@@ -442,6 +619,28 @@ namespace AC1SaveExplorer
             {
                 File.WriteAllText(dlg.FileName, JsonSerializer.Serialize(_classNames, JsonOpts));
                 HashStatus.Text = $"Exported {_classNames.Count} object names to {Path.GetFileName(dlg.FileName)}.";
+            }
+            catch (Exception ex)
+            {
+                HashStatus.Text = "Export failed: " + ex.Message;
+            }
+        }
+
+        // Writes BOTH dictionaries together in the exact {"propHashes":..., "classNames":...}
+        // shape community_hashes.json uses — the file this produces can directly overwrite that
+        // repo file. "Export property hashes…" / "Export object names…" above are flat, single-
+        // dictionary files instead (matching prop_hashes.json / class_names.json) — NOT what
+        // community_hashes.json needs, so don't use those two for updating the repo file.
+        private void BtnExportCommunity_Click(object sender, RoutedEventArgs e)
+        {
+            var dlg = new SaveFileDialog { Filter = "JSON (*.json)|*.json", FileName = "community_hashes.json" };
+            if (dlg.ShowDialog() != true) return;
+            try
+            {
+                var combined = new CommunityDictionaryFile { PropHashes = _propHashes, ClassNames = _classNames };
+                File.WriteAllText(dlg.FileName, JsonSerializer.Serialize(combined, JsonOpts));
+                HashStatus.Text = $"Exported {_propHashes.Count} property names and {_classNames.Count} object names " +
+                                   $"in community_hashes.json format to {Path.GetFileName(dlg.FileName)}.";
             }
             catch (Exception ex)
             {

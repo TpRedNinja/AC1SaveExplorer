@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -34,6 +34,14 @@ namespace AC1SaveExplorer
     {
         public List<string> Names { get; set; } = new();
         public string Category { get; set; } = "uncategorized"; // "save" | "mission" | "uncategorized"
+    }
+
+    // the single JSON file the app pulls from GitHub — combines both dictionaries so
+    // contributors only ever need to edit one file and send one pull request.
+    public class CommunityDictionaryFile
+    {
+        [JsonPropertyName("propHashes")] public Dictionary<string, List<string>> PropHashes { get; set; } = new();
+        [JsonPropertyName("classNames")] public Dictionary<string, ClassNameEntry> ClassNames { get; set; } = new();
     }
 
     // ----- view-facing models -----

@@ -8,7 +8,7 @@ AC1's save format identifies almost everything by hash — `classID`s for object
 
 ## Features
 
-- **Load any AC1SaveTool-style dump** (`.json`) and browse it as a categorized, searchable, expandable list.
+- **Load any AC1SaveTool-style dump** (`.json`) and browse it as a categorized, searchable, expandable list. Handles both the pre-0.2.0 flat property/value shape and the 0.2.0+ shape (`properties[i].objectHandles[0].id`/`idHash`, `values[i].value`/`type`) — including AC1SaveTool's own embedded `classIDHash`, used as a fallback name when a classID isn't in this app's community dictionary yet.
 - **Save File / Mission / Uncategorized / Candidates tabs** — Candidates automatically surfaces objects that share the exact property signature of a confirmed mission object (`MissionStatus` / `IsCompleted` / `Unknown`) but haven't been named yet, so you can work through likely-mission objects one by one instead of hunting blind.
 - **Inline naming** — type a name and pick a category for any object; it applies to every object sharing that `classID` and persists automatically.
 - **Growable hash dictionaries** — a property-hash dictionary (seeded from AC1SaveTool's own `hashes.json`) and an object/class-name dictionary, both editable, exportable, and auto-saved to `%AppData%\AC1SaveExplorer\` between sessions.

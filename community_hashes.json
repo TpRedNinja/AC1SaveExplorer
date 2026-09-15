@@ -33,9 +33,6 @@
     "588182160": [
       "MountIndex"
     ],
-    "749985180": [
-      "Unknown3 (mission)"
-    ],
     "782802969": [
       "Monitor"
     ],
@@ -44,9 +41,6 @@
     ],
     "864635854": [
       "HorseMonitorData"
-    ],
-    "882350721": [
-      "MissionStatus"
     ],
     "955405642": [
       "MainDaggerBeltCount"
@@ -74,9 +68,6 @@
     ],
     "1361138523": [
       "SetByPlayerMarker"
-    ],
-    "1379586241": [
-      "IsCompleted"
     ],
     "1496786106": [
       "CheckPointOnlySemaphore"
@@ -107,9 +98,6 @@
     ],
     "1712664970": [
       "InvertYLook"
-    ],
-    "1842287097": [
-      "Unknown (mission)"
     ],
     "1849811038": [
       "NothingIsTrueEverythingIsPermitted"
@@ -213,9 +201,6 @@
     "3161216672": [
       "IsKnown"
     ],
-    "3184416448": [
-      "Unknown2 (mission)"
-    ],
     "3197466611": [
       "AltairMarker"
     ],
@@ -266,11 +251,57 @@
     ],
     "4272727674": [
       "OtherMonitor"
+    ],
+    "882350721": [
+      "MissionStatus"
+    ],
+    "1379586241": [
+      "IsCompleted"
+    ],
+    "1842287097": [
+      "Unknown (mission)"
+    ],
+    "749985180": [
+      "Unknown3 (mission)"
+    ],
+    "3184416448": [
+      "Unknown2 (mission)"
     ]
   },
   "classNames": {
+    "1005212782": {
+      "Names": [
+        "M02_SolomonTemple.MissionItemList"
+      ],
+      "Category": "mission"
+    },
+    "1040056258": {
+      "Names": [
+        "M05_HorseTutorial.MissionItemList"
+      ],
+      "Category": "mission"
+    },
+    "1045371048": {
+      "Names": [
+        "M06_MasyafUnderAttack.MissionItemList"
+      ],
+      "Category": "mission"
+    },
+    "1165355488": {
+      "Names": [
+        "Close_Tower_Trap.MissionItemSceneSequencer"
+      ],
+      "Category": "mission"
+    },
+    "2927099110": {
+      "Names": [
+        "Unload MB1.MissionItemChangeWorld"
+      ],
+      "Category": "mission"
+    },
     "3003": {
       "Names": [
+        "PlayerSaveData",
         "PlayerSaveData (global save state - holds CurrentSaveWorldID etc.)"
       ],
       "Category": "save"
@@ -1589,12 +1620,6 @@
       ],
       "Category": "mission"
     },
-    "1005212782": {
-      "Names": [
-        "M02_SolomonTemple"
-      ],
-      "Category": "mission"
-    },
     "1013569902": {
       "Names": [
         "M69_RobertDeSable"
@@ -1613,12 +1638,6 @@
       ],
       "Category": "mission"
     },
-    "1040056258": {
-      "Names": [
-        "M05_HorseTutorial"
-      ],
-      "Category": "mission"
-    },
     "1040056261": {
       "Names": [
         "01_EnterMasyaf"
@@ -1628,12 +1647,6 @@
     "1040056263": {
       "Names": [
         "GPS_Tutorial"
-      ],
-      "Category": "mission"
-    },
-    "1045371048": {
-      "Names": [
-        "M06_MasyafUnderAttack"
       ],
       "Category": "mission"
     },
@@ -1772,12 +1785,6 @@
     "1147913948": {
       "Names": [
         "03_ReportToSinan"
-      ],
-      "Category": "mission"
-    },
-    "1165355488": {
-      "Names": [
-        "Close_Tower_Trap"
       ],
       "Category": "mission"
     },
@@ -3023,12 +3030,6 @@
       ],
       "Category": "mission"
     },
-    "2927099110": {
-      "Names": [
-        "Unload MB1"
-      ],
-      "Category": "mission"
-    },
     "2927099520": {
       "Names": [
         "Unload MB2"
@@ -3847,7 +3848,7 @@
     },
     "3453309830": {
       "Names": [
-        "05_LOF_Must-See&Tuto"
+        "05_LOF_Must-See\u0026Tuto"
       ],
       "Category": "mission"
     },
@@ -4003,13 +4004,13 @@
     },
     "3616374283": {
       "Names": [
-        "00_Elipse&Save_MUA"
+        "00_Elipse\u0026Save_MUA"
       ],
       "Category": "mission"
     },
     "3616374284": {
       "Names": [
-        "Elipse&Save_LOF"
+        "Elipse\u0026Save_LOF"
       ],
       "Category": "mission"
     },
@@ -4352,6 +4353,67 @@
     "4021658457": {
       "Names": [
         "M99_S27_Conference_Computer"
+      ],
+      "Category": "mission"
+    },
+    "2092": {
+      "Names": [
+        "Map Manager"
+      ],
+      "Category": "save"
+    },
+    "2093": {
+      "Names": [
+        "Progression Manager"
+      ],
+      "Category": "save"
+    },
+    "3004": {
+      "Names": [
+        "Horse Manager"
+      ],
+      "Category": "save"
+    },
+    "3008": {
+      "Names": [
+        "PersistedIDS"
+      ],
+      "Category": "save"
+    },
+    "3009": {
+      "Names": [
+        "SideMissionCounts",
+        "SideMissions"
+      ],
+      "Category": "save"
+    },
+    "3010": {
+      "Names": [
+        "Config Manager"
+      ],
+      "Category": "save"
+    },
+    "165386406": {
+      "Names": [
+        "M03_S05_High/Low_Profile.MissionItemSceneSequencer"
+      ],
+      "Category": "mission"
+    },
+    "206969173": {
+      "Names": [
+        "Scholars_HelpingTrap_FM2.MissionItemScholars"
+      ],
+      "Category": "mission"
+    },
+    "206969185": {
+      "Names": [
+        "Vigilantes_HelpingTrap_FM3.MissionItemVigilantes"
+      ],
+      "Category": "mission"
+    },
+    "206971577": {
+      "Names": [
+        "Vigilantes_HelpingTrap_FM4.MissionItemVigilantes"
       ],
       "Category": "mission"
     }

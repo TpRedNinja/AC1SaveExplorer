@@ -22,9 +22,19 @@ namespace AC1SaveExplorer
     public class SaveObjectRaw
     {
         [JsonPropertyName("classID")] public long ClassID { get; set; }
+        // AC1SaveTool v0.2.0+ embeds the resolved class name straight into the dump (from its own
+        // shipped hashes.json) when it recognizes the classID. Null/absent on older dumps or
+        // classIDs it doesn't know — those still fall back to our own community dictionary.
+        [JsonPropertyName("classIDHash")] public string? ClassIDHash { get; set; }
         [JsonPropertyName("index")] public int Index { get; set; }
         [JsonPropertyName("propertyCount")] public int PropertyCount { get; set; }
+        // v0.1.x shape: each entry is either a bare number or a flat object carrying "id"/"idHash" directly.
+        // v0.2.0+ shape: each entry is {"objectCount", "objectHandles":[{"id","idHash","subIndex"}, ...], "unknown"} —
+        // the property's identity moved one level deeper. Both shapes are handled where these are read.
         [JsonPropertyName("properties")] public List<JsonElement> Properties { get; set; } = new();
+        // v0.1.x shape: each entry is a bare scalar (number/bool/string/array/object) — the value itself.
+        // v0.2.0+ shape: each entry is {"objHandles[0].id", "objHandles[0].idHash", "type", "value"} — the
+        // actual value now lives under a nested "value" field alongside its resolved "type".
         [JsonPropertyName("values")] public List<JsonElement> Values { get; set; } = new();
     }
 

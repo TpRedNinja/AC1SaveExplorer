@@ -323,12 +323,15 @@ namespace AC1SaveExplorer
             return classID > 0 && classID < 100000 ? "save" : "uncategorized";
         }
 
-        private string NameFor(long classID)
+        private string NameFor(long classID, string? toolClassIDHash = null)
         {
             var key = classID.ToString();
             if (_classNames.TryGetValue(key, out var entry) && entry.Names.Count > 0)
                 return entry.Names[0];
-            return "";
+            // AC1SaveTool v0.2.0+ ships its own hashes.json and stamps "classIDHash" straight onto
+            // objects it already recognizes — fall back to that when our community dictionary
+            // hasn't caught up yet, rather than showing "unnamed object".
+            return toolClassIDHash ?? "";
         }
 
         private void RebuildObjects()
@@ -341,7 +344,7 @@ namespace AC1SaveExplorer
                 var vm = new SaveObjectVm(raw, BuildRowsFor)
                 {
                     Category = CategoryFor(raw.ClassID),
-                    Name = NameFor(raw.ClassID)
+                    Name = NameFor(raw.ClassID, raw.ClassIDHash)
                 };
                 _allObjects.Add(vm);
             }
@@ -358,11 +361,45 @@ namespace AC1SaveExplorer
             if (p.ValueKind == JsonValueKind.Number) return p.GetRawText();
             if (p.ValueKind == JsonValueKind.Object)
             {
+                // v0.1.x: the id sits directly on the property object.
                 var idEl = TryGetAny(p, "id", "hash", "propertyId", "nameHash");
                 if (idEl != null) return idEl.Value.GetRawText();
+                // v0.2.0+: the id moved into objectHandles[0].id — that first handle is what
+                // "MissionStatus"/"IsCompleted"/etc. resolve to, and what the parallel "values"
+                // array keys off of ("objHandles[0].id"), so it's the right thing to key a
+                // signature on too.
+                var handleId = FirstHandleId(p);
+                if (handleId != null) return handleId;
                 return p.GetRawText();
             }
             if (p.ValueKind == JsonValueKind.String) return p.GetString();
+            return null;
+        }
+
+        // v0.2.0+ property shape: {"objectCount", "objectHandles":[{"id","idHash","subIndex"}, ...], "unknown"}
+        private static string? FirstHandleId(JsonElement p)
+        {
+            if (p.ValueKind != JsonValueKind.Object) return null;
+            if (!p.TryGetProperty("objectHandles", out var handles) || handles.ValueKind != JsonValueKind.Array) return null;
+            foreach (var h in handles.EnumerateArray())
+            {
+                if (h.ValueKind == JsonValueKind.Object && h.TryGetProperty("id", out var idEl))
+                    return idEl.GetRawText();
+                break; // only the first handle
+            }
+            return null;
+        }
+
+        private static string? FirstHandleIdHash(JsonElement p)
+        {
+            if (p.ValueKind != JsonValueKind.Object) return null;
+            if (!p.TryGetProperty("objectHandles", out var handles) || handles.ValueKind != JsonValueKind.Array) return null;
+            foreach (var h in handles.EnumerateArray())
+            {
+                if (h.ValueKind == JsonValueKind.Object && h.TryGetProperty("idHash", out var hashEl) && hashEl.ValueKind == JsonValueKind.String)
+                    return hashEl.GetString();
+                break;
+            }
             return null;
         }
 
@@ -422,14 +459,34 @@ namespace AC1SaveExplorer
                     }
                     else if (p.ValueKind == JsonValueKind.Object)
                     {
+                        // v0.1.x: id/type sit directly on the property object.
                         string? idStr = TryGetAny(p, "id", "hash", "propertyId", "nameHash")?.GetRawText();
-                        rawId = idStr ?? p.GetRawText();
+                        string? toolIdHash = TryGetAny(p, "idHash")?.GetString();
                         string? typeStr = TryGetAny(p, "type", "valueType")?.ToString();
+
+                        // v0.2.0+: id/name moved into objectHandles[0].
+                        if (idStr == null)
+                        {
+                            idStr = FirstHandleId(p);
+                            toolIdHash ??= FirstHandleIdHash(p);
+                        }
+
+                        rawId = idStr ?? p.GetRawText();
                         type = typeStr ?? type;
+
                         if (idStr != null && _propHashes.TryGetValue(idStr, out var names) && names.Count > 0)
                         {
+                            // our community dictionary wins when it has a name — it may carry a
+                            // more specific/curated label than the tool's own embedded hash.
                             isNamed = true;
                             displayName = names[0];
+                        }
+                        else if (!string.IsNullOrEmpty(toolIdHash))
+                        {
+                            // AC1SaveTool already resolved this one itself; show it even if our
+                            // own dictionary hasn't caught up yet.
+                            isNamed = true;
+                            displayName = toolIdHash!;
                         }
                         else displayName = $"prop_{rawId}";
                     }
@@ -467,6 +524,15 @@ namespace AC1SaveExplorer
 
         private static string DescribeValue(JsonElement v, ref string type)
         {
+            // v0.2.0+: values are wrapped as {"objHandles[0].id", "objHandles[0].idHash", "type", "value"}
+            // instead of being the bare scalar itself — unwrap before describing.
+            if (v.ValueKind == JsonValueKind.Object && v.TryGetProperty("value", out var inner))
+            {
+                if (type == "?" && v.TryGetProperty("type", out var typeEl) && typeEl.ValueKind == JsonValueKind.String)
+                    type = typeEl.GetString() ?? type;
+                return DescribeValue(inner, ref type);
+            }
+
             switch (v.ValueKind)
             {
                 case JsonValueKind.Number:

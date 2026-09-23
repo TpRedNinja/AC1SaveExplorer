@@ -875,25 +875,25 @@
       "Names": [
         "ContextTuto_AssassinationMission_Emir"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "466424829": {
       "Names": [
         "ContextTuto_AssassinationMission_Garnier"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "2093051311": {
       "Names": [
         "ContextTuto_AssassinationMission_Jubair"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "2093051254": {
       "Names": [
         "ContextTuto_AssassinationMission_Maria"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "2093050103": {
       "Names": [
@@ -905,7 +905,7 @@
       "Names": [
         "ContextTuto_AssassinationMission_Sibrand"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "466424846": {
       "Names": [
@@ -917,7 +917,7 @@
       "Names": [
         "ContextTuto_AssassinationMission_Tamir"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "2093051297": {
       "Names": [
@@ -929,7 +929,7 @@
       "Names": [
         "ContextTuto_BlendHorse"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "285248150": {
       "Names": [
@@ -941,7 +941,7 @@
       "Names": [
         "ContextTuto_BlendingBlue"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "285248152": {
       "Names": [
@@ -965,37 +965,37 @@
       "Names": [
         "ContextTuto_CriticalState"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "285248155": {
       "Names": [
         "ContextTuto_DaggerPickpocket"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "285248156": {
       "Names": [
         "ContextTuto_FastAttack"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "285248157": {
       "Names": [
         "ContextTuto_FightingOnHorse"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "285248158": {
       "Names": [
         "ContextTuto_HighLowProfileCombat"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "285248159": {
       "Names": [
         "ContextTuto_Investigation"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "285248160": {
       "Names": [
@@ -1007,25 +1007,25 @@
       "Names": [
         "ContextTuto_NoEagleVision"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "285248161": {
       "Names": [
         "ContextTuto_OCRed"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "285248162": {
       "Names": [
         "ContextTuto_PickpocketFailed"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "1407868332": {
       "Names": [
         "ContextTuto_Sprint"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "285248165": {
       "Names": [
@@ -1037,13 +1037,13 @@
       "Names": [
         "ContextTuto_Tackle"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "285248167": {
       "Names": [
         "ContextTuto_TargetGuardTower"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "285248128": {
       "Names": [
@@ -1055,7 +1055,7 @@
       "Names": [
         "ContextualTutorial_KilledInnocence"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "398316529": {
       "Names": [
@@ -1701,7 +1701,7 @@
       "Names": [
         "Global_Block_Tutorial"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "1996477482": {
       "Names": [
@@ -1713,37 +1713,37 @@
       "Names": [
         "Global_Dagger_Tutorial_001"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "554046892": {
       "Names": [
         "Global_Dagger_Tutorial_002"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "554046893": {
       "Names": [
         "Global_Dagger_Tutorial_003"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "554046894": {
       "Names": [
         "Global_Dagger_Tutorial_004"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "554046895": {
       "Names": [
         "Global_Dagger_Tutorial_005"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "343897480": {
       "Names": [
         "Global_FastAttack_Tutorial"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "1255999064": {
       "Names": [
@@ -1767,13 +1767,13 @@
       "Names": [
         "Global_Investigation_Tutorial"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "737193384": {
       "Names": [
         "Global_KilledInnocence"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "724302789": {
       "Names": [
@@ -1785,7 +1785,7 @@
       "Names": [
         "Global_NoEagleVisionTuto"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "1225424110": {
       "Names": [
@@ -1797,31 +1797,31 @@
       "Names": [
         "Global_Profil_Tutorial"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "1407868333": {
       "Names": [
         "Global_SprintTutorial"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "343897496": {
       "Names": [
         "Global_StrongAttack_Tutorial"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "466578445": {
       "Names": [
         "Global_Tackle_Tutorial"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "466577510": {
       "Names": [
         "Global_TargetAtGuardTower_Tutorial"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "3064184129": {
       "Names": [
@@ -2019,7 +2019,7 @@
       "Names": [
         "M02_Morning_HideObjects"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "2385071367": {
       "Names": [
@@ -2181,7 +2181,7 @@
       "Names": [
         "M08_Evening_HideObjects"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "3083308812": {
       "Names": [
@@ -2193,7 +2193,7 @@
       "Names": [
         "M08_Morning_HideObjects"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "3083308813": {
       "Names": [
@@ -2337,13 +2337,13 @@
       "Names": [
         "M15_Evening_HideObjects"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "266620774": {
       "Names": [
         "M15_Morning_HideObjects"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "2043775280": {
       "Names": [
@@ -2469,7 +2469,7 @@
       "Names": [
         "M28_Evening_HideObjects"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "2927440063": {
       "Names": [
@@ -2481,7 +2481,7 @@
       "Names": [
         "M28_Morning_HideObjects"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "3554667229": {
       "Names": [
@@ -2643,7 +2643,7 @@
       "Names": [
         "M47_Evening_HideObjects"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "3695189473": {
       "Names": [
@@ -2655,7 +2655,7 @@
       "Names": [
         "M47_Morning_HideObjects"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "3695189472": {
       "Names": [
@@ -2769,7 +2769,7 @@
       "Names": [
         "M60_Evening_HideObjects"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "535323024": {
       "Names": [
@@ -2781,7 +2781,7 @@
       "Names": [
         "M60_Morning_HideObjects"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "535323023": {
       "Names": [
@@ -2883,7 +2883,7 @@
       "Names": [
         "M70_Evening_HideObjects"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "880774169": {
       "Names": [
@@ -2895,7 +2895,7 @@
       "Names": [
         "M70_Morning_HideObjects"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "880774168": {
       "Names": [
@@ -4096,31 +4096,31 @@
       "Names": [
         "T 18 - Glitch Tutorial"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "1005212776": {
       "Names": [
         "T 20 - Free-step Tutorial Part 2"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "1005212771": {
       "Names": [
         "T15 - Free-step Tutorial Part 1"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "1005212773": {
       "Names": [
         "T17 - Assassination Tutorial"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "1005212777": {
       "Names": [
         "T21 - Walling Tutorial"
       ],
-      "Category": "mission"
+      "Category": "save"
     },
     "1045371051": {
       "Names": [
@@ -4465,6 +4465,7 @@
     },
     "206972543": {
       "Names": [
+        "Vigilantes_HelpingTrap_FM7",
         "Vigilantes_HelpingTrap_FM7.MissionItemVigilantes"
       ],
       "Category": "mission"
@@ -6081,6 +6082,90 @@
     "3958573508": {
       "Names": [
         "M28_S07_WhileMB04"
+      ],
+      "Category": "mission"
+    },
+    "464021904": {
+      "Names": [
+        "DoneAMemoryReplay"
+      ],
+      "Category": "save"
+    },
+    "464021923": {
+      "Names": [
+        "DoneAMemoryReplay"
+      ],
+      "Category": "save"
+    },
+    "466424836": {
+      "Names": [
+        "ContextTuto_AssassinationMission"
+      ],
+      "Category": "save"
+    },
+    "854073364": {
+      "Names": [
+        "Bureau_Initial"
+      ],
+      "Category": "mission"
+    },
+    "880778483": {
+      "Names": [
+        "M99_S22_HideInventory"
+      ],
+      "Category": "mission"
+    },
+    "2093051224": {
+      "Names": [
+        "ContextTuto_AssassinationMission"
+      ],
+      "Category": "save"
+    },
+    "2093051240": {
+      "Names": [
+        "ContextTuto_AssassinationMission"
+      ],
+      "Category": "save"
+    },
+    "2093051255": {
+      "Names": [
+        "ContextTuto_AssassinationMission"
+      ],
+      "Category": "save"
+    },
+    "3380848346": {
+      "Names": [
+        "FreeMission_FM4_Reward_Vigilantes"
+      ],
+      "Category": "mission"
+    },
+    "3380848652": {
+      "Names": [
+        "FreeMission_FM5_Reward_Vigilantes"
+      ],
+      "Category": "mission"
+    },
+    "3380848654": {
+      "Names": [
+        "FreeMission_FM7_Reward_Vigilantes"
+      ],
+      "Category": "mission"
+    },
+    "3380848686": {
+      "Names": [
+        "FreeMission_FM9_Reward_Vigilantes"
+      ],
+      "Category": "mission"
+    },
+    "3460045347": {
+      "Names": [
+        "FreeMission_FM3_Reward_Vigilantes"
+      ],
+      "Category": "mission"
+    },
+    "3460045351": {
+      "Names": [
+        "FreeMission_FM5_Reward_Vigilantes"
       ],
       "Category": "mission"
     }
